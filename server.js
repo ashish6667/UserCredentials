@@ -2,34 +2,23 @@ import express from 'express';
 import connectDB from './configs/db.js';
 import userRoute from './routes/userRoute.js';
 import dotenv from 'dotenv';
-dotenv.config();
 import cors from 'cors';
 
-const app = express();
-const PORT =process.env.PORT || 3000;
+dotenv.config();
 
-// ✅ Allow frontend (React) origin
+const app = express();
+
 app.use(cors({
-  origin: 'http://localhost:5173', // or "*" if you want to allow all
+  origin: '*', // or specify your frontend URL
   credentials: true
 }));
 
-// db connection
+app.use(express.json());
+app.use('/api/users', userRoute);
+app.get('/', (req, res) => {
+  res.send('Server is running!');
+});
+
 await connectDB();
 
-// Middleware
-app.use(express.json()); // for parsing application/json
-
-// Routes
-app.use('/api/users', userRoute);
-
-
-app.get('/', (req,res) =>{
-    res.send('Server is running')
-})
-
-app.listen(PORT,()=>{
-    console.log(`Server is running on http://localhost:${PORT}`);
-})
-
-export default app;
+export default app; // ✅ Vercel will handle the request — no need to listen on a port
