@@ -9,16 +9,32 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: '*', // or specify your frontend URL
-  credentials: true
+  origin: '*',
+  credentials: true,
 }));
 
 app.use(express.json());
+
+// ✅ Connect DB before any route is hit
+let isDBConnected = false;
+
+app.use(async (req, res, next) => {
+  if (!isDBConnected) {
+    try {
+      await connectDB();
+      isDBConnected = true;
+    } catch (err) {
+      console.error("Database connection error:", err.message);
+      return res.status(500).json({ error: "Database connection failed" });
+    }
+  }
+  next();
+});
+
 app.use('/api/users', userRoute);
+
 app.get('/', (req, res) => {
   res.send('Server is running!');
 });
 
-await connectDB();
-
-export default app; // ✅ Vercel will handle the request — no need to listen on a port
+export default app; // ✅ For Vercel
