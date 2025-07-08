@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-  `${import.meta.env.VITE_API_BASE_URL}/users/login`,
+  `${import.meta.env.VITE_API_BASE_URL}/api/users/login`,
   formData
 );
 
