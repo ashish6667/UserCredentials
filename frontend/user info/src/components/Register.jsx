@@ -12,7 +12,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/", formData);
+     const res = await API.post("/api/users", formData); // ✅ matches backend
       toast.success("Registered Successfully!");
       console.log(res.data);
     } catch (err) {

@@ -28,7 +28,8 @@ const Login = () => {
       // Navigate to dashboard or home
       navigate("/");
     } catch (err) {
-      toast.error("Login Failed: " + err.response?.data?.error);
+     toast.error("Login Failed: " + (err.response?.data?.error || err.message));
+
     }
   };
 
